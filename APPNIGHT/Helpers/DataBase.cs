@@ -10,7 +10,7 @@ namespace APPNIGHT.Helpers
 {
     public class DataBase
     {
-        protected string conectionString = "Server=localhost;Database=cerveja;User=root;Password=root;";
+        protected string conectionString = "Server=localhost;Database=APPNIGHT;User=root;Password=root;";
 
 
         protected MySqlConnection GetConnection()

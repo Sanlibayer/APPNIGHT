@@ -12,6 +12,7 @@ namespace APPNIGHT
                 try
                 {
                     Menu menu = new Menu();
+                    menu.MostrarMenuPrincipal();
                     
                 }
                 catch (MySqlException ex)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace APPNIGHT.Model
 {
-    internal interface ICrud
+    public interface ICrud
     {
         public void Create();
         public void Update();
