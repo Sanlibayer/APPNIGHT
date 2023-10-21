@@ -20,8 +20,9 @@ namespace APPNIGHT.Model
             estabelecimento = Popular(estabelecimento);
             using (MySqlConnection connection = new MySqlConnection(conectionString))
             {
-                string sql = "INSERT INTO ESTABELECIMENTO VALUE (NULL, @NOME, @ENDERECO, @HORARIO_FUNCIONAMENTO, @TIPO, @LOTACAO, " +
-                    "@QUANTIDADE_MESAS, @PRECO_ENTRADA, @VAGAS_ESTACIONAMENTO)";
+                string sql = "INSERT INTO ESTABELECIMENTO_2 VALUE (NULL, @NOME, @ENDERECO, @LOTACAO, " +
+                    "@HORARIO_FUNCIONAMENTO, @VAGAS_ESTACIONAMENTO, " +
+                    "@QUANTIDADE_MESAS, @PRECO_ENTRADA, @TIPO)";
                 int linhas = connection.Execute(sql, estabelecimento);
                 Console.WriteLine($"Tipo inserido - {linhas} linhas afetadas");
             }
@@ -86,8 +87,6 @@ namespace APPNIGHT.Model
         }
         public void Update()
         {
-
         }
-
     }
 }
