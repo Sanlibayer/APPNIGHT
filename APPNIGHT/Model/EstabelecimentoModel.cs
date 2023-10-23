@@ -2,8 +2,10 @@
 using APPNIGHT.Helpers;
 using Dapper;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,7 +24,9 @@ namespace APPNIGHT.Model
                     "@HORARIO_FUNCIONAMENTO, @VAGAS_ESTACIONAMENTO, " +
                     "@QUANTIDADE_MESAS, @PRECO_ENTRADA, @TIPO)";
                 int linhas = connection.Execute(sql, estabelecimento);
-                Console.WriteLine($"Tipo inserido - {linhas} linhas afetadas");
+                Console.WriteLine($"ESTABELECIMENTO INSERIDO COM SUCESSO!");
+                Console.WriteLine("TECLE ENTER PARA CONTINUAR");
+                Console.ReadLine();
             }
         }
         private EstabelecimentoEntity Popular(EstabelecimentoEntity estabelecimento)
@@ -55,6 +59,8 @@ namespace APPNIGHT.Model
             string sql = "DELETE FROM ESTABELECIMENTO WHERE ID = @ID";
             this.Execute(sql, parameters);
             Console.WriteLine("Produto excluido com sucesso");
+            Console.WriteLine("TECLE ENTER PARA RETORNAR");
+            Console.ReadLine();
         }
         private int GetIndex()
         {
@@ -77,6 +83,8 @@ namespace APPNIGHT.Model
                 Console.WriteLine($"Vagas de estacionamento: {estabelecimento.VAGAS_ESTACIONAMENTO}");
 
             }
+            Console.WriteLine("TECLE ENTER PARA CONTINUAR");
+            Console.ReadLine();
         }
         private IEnumerable<EstabelecimentoEntity> GetEstabelecimento()
         {
@@ -90,10 +98,7 @@ namespace APPNIGHT.Model
             Console.WriteLine("INFORME O ID DO ESTABELECIMENTO DESEJA ALTERAR?");
             int id = Convert.ToInt32(Console.ReadLine());
             EstabelecimentoEntity estabelecimento = Popular(GetEstabelecimentoById(id));
-            string sql = "UPDATE ESTABELECIMENTO SET NOME = @NOME, ENDERECO = @ENDERECO, LOTACAO = @LOTACAO, " +
-                "HORARIO_FUNCIONAMENTO = @HORARIO_FUNCIONAMENTO, VAGAS_ESTACIONAMENTO = @VAGAS_ESTACIONAMENTO, " +
-                "QUANTIDADE_MESAS = @QUANTIDADE_MESAS, PRECO_ENTRADA = @PRECO_ENTRADA, TIPO = @TIPO" +
-                "WHERE ID = @ID";
+            string sql = "UPDATE ESTABELECIMENTO SET NOME = @NOME, ENDERECO = @ENDERECO, LOTACAO = @LOTACAO, HORARIO_FUNCIONAMENTO = @HORARIO_FUNCIONAMENTO, VAGAS_ESTACIONAMENTO = @VAGAS_ESTACIONAMENTO, QUANTIDADE_MESAS = @QUANTIDADE_MESAS, PRECO_ENTRADA = @PRECO_ENTRADA, TIPO = @TIPO WHERE ID = @ID";
             this.Execute(sql, estabelecimento);
         }
         private EstabelecimentoEntity GetEstabelecimentoById(int id)
