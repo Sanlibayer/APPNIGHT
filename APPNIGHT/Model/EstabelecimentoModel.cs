@@ -2,8 +2,10 @@
 using APPNIGHT.Helpers;
 using Dapper;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Relational;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,19 +14,19 @@ namespace APPNIGHT.Model
 {
     public class EstabelecimentoModel : DataBase, ICrud
     {
-
-
         public void Create()
         {
             EstabelecimentoEntity estabelecimento = new EstabelecimentoEntity();
             estabelecimento = Popular(estabelecimento);
             using (MySqlConnection connection = new MySqlConnection(conectionString))
             {
-                string sql = "INSERT INTO ESTABELECIMENTO_2 VALUE (NULL, @NOME, @ENDERECO, @LOTACAO, " +
+                string sql = "INSERT INTO ESTABELECIMENTO VALUE (NULL, @NOME, @ENDERECO, @LOTACAO, " +
                     "@HORARIO_FUNCIONAMENTO, @VAGAS_ESTACIONAMENTO, " +
                     "@QUANTIDADE_MESAS, @PRECO_ENTRADA, @TIPO)";
                 int linhas = connection.Execute(sql, estabelecimento);
-                Console.WriteLine($"Tipo inserido - {linhas} linhas afetadas");
+                Console.WriteLine($"ESTABELECIMENTO INSERIDO COM SUCESSO!");
+                Console.WriteLine("TECLE ENTER PARA CONTINUAR");
+                Console.ReadLine();
             }
         }
         private EstabelecimentoEntity Popular(EstabelecimentoEntity estabelecimento)
@@ -54,9 +56,11 @@ namespace APPNIGHT.Model
         public void Delete()
         {
             var parameters = new { Id = GetIndex() };
-            string sql = "DELETE FROM ESTABELECIMENTO_2 WHERE ID = @ID";
+            string sql = "DELETE FROM ESTABELECIMENTO WHERE ID = @ID";
             this.Execute(sql, parameters);
             Console.WriteLine("Produto excluido com sucesso");
+            Console.WriteLine("TECLE ENTER PARA RETORNAR");
+            Console.ReadLine();
         }
         private int GetIndex()
         {
@@ -79,14 +83,29 @@ namespace APPNIGHT.Model
                 Console.WriteLine($"Vagas de estacionamento: {estabelecimento.VAGAS_ESTACIONAMENTO}");
 
             }
+            Console.WriteLine("TECLE ENTER PARA CONTINUAR");
+            Console.ReadLine();
         }
         private IEnumerable<EstabelecimentoEntity> GetEstabelecimento()
         {
-            string sql = "SELECT * FROM ESTABELECIMENTO_2";
+            string sql = "SELECT * FROM ESTABELECIMENTO";
             return this.GetConnection().Query<EstabelecimentoEntity>(sql);
         }
         public void Update()
         {
+            Console.WriteLine("ESTABELECIMENTOS CADASTRADOS:");
+            Read();
+            Console.WriteLine("INFORME O ID DO ESTABELECIMENTO DESEJA ALTERAR?");
+            int id = Convert.ToInt32(Console.ReadLine());
+            EstabelecimentoEntity estabelecimento = Popular(GetEstabelecimentoById(id));
+            string sql = "UPDATE ESTABELECIMENTO SET NOME = @NOME, ENDERECO = @ENDERECO, LOTACAO = @LOTACAO, HORARIO_FUNCIONAMENTO = @HORARIO_FUNCIONAMENTO, VAGAS_ESTACIONAMENTO = @VAGAS_ESTACIONAMENTO, QUANTIDADE_MESAS = @QUANTIDADE_MESAS, PRECO_ENTRADA = @PRECO_ENTRADA, TIPO = @TIPO WHERE ID = @ID";
+            this.Execute(sql, estabelecimento);
+        }
+        private EstabelecimentoEntity GetEstabelecimentoById(int id)
+        {
+            string sql = "SELECT * FROM ESTABELECIMENTO WHERE ID = @ID";
+            var parametros = new { ID = id };
+            return this.GetConnection().QueryFirst<EstabelecimentoEntity>(sql, parametros);
         }
     }
 }
