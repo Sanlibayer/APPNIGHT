@@ -80,16 +80,21 @@ namespace APPNIGHT.Model
         private int GetIndex()
         {
             Read();
-            Console.WriteLine("Digite o id para continuar");
+            Console.WriteLine();
+            Console.WriteLine("Acima estão listados os estabelecimentos");
+            Console.Write("Digite o ID do estabelecimento que você deseja excluir: ");
             return Convert.ToInt32(Console.ReadLine());
         }
 
 
         public void Read(bool showPrompot = false)
         {
+            Console.Clear();
             IEnumerable<EstabelecimentoEntity> estabelecimentos = GetEstabelecimento();
             foreach (EstabelecimentoEntity estabelecimento in estabelecimentos)
             {
+                Console.WriteLine();
+                Console.WriteLine("----------------------------------------");
                 Console.WriteLine();
                 Console.WriteLine($"{estabelecimento.ID} - {estabelecimento.NOME} / {estabelecimento.TIPO}");
                 Console.WriteLine($"Endereço: {estabelecimento.ENDERECO}");
@@ -119,7 +124,7 @@ namespace APPNIGHT.Model
             Read();
             Console.Write("\nInforme o ID do estabelecimento que deseja alterar: ");
             int id = Convert.ToInt32(Console.ReadLine());
-            EstabelecimentoEntity estabelecimento = Popular(GetEstabelecimentoById(id));
+            EstabelecimentoEntity estabelecimento = PopularUpdate(GetEstabelecimentoById(id));
             string sql = "UPDATE ESTABELECIMENTO_2 SET NOME = @NOME, ENDERECO = @ENDERECO, LOTACAO = @LOTACAO, HORARIO_FUNCIONAMENTO = @HORARIO_FUNCIONAMENTO, VAGAS_ESTACIONAMENTO = @VAGAS_ESTACIONAMENTO, QUANTIDADE_MESAS = @QUANTIDADE_MESAS, PRECO_ENTRADA = @PRECO_ENTRADA, TIPO = @TIPO WHERE ID = @ID";
             this.Execute(sql, estabelecimento);
             }
@@ -129,6 +134,44 @@ namespace APPNIGHT.Model
                 Console.ReadLine();
                 Update();
             }
+        }
+        private EstabelecimentoEntity PopularUpdate(EstabelecimentoEntity estabelecimento)
+        {
+            try
+            {
+                Console.Clear();
+                Console.WriteLine("------ EDITAR ESTABELECIMENTO ------");
+                Console.WriteLine();
+                Console.Write("\nNome do Estabelecimento: ");
+                ConsoleHelpers.ChangeValue(estabelecimento.NOME);
+                Console.Write("\nEndereço do Estabelecimento: ");
+                ConsoleHelpers.ChangeValue(estabelecimento.ENDERECO);
+                Console.Write("\nHorário de funcionamento do Estabelecimento: ");
+                ConsoleHelpers.ChangeValue(estabelecimento.HORARIO_FUNCIONAMENTO);
+                Console.Write("\nTipo do Estabelecimento: ");
+                ConsoleHelpers.ChangeValue(estabelecimento.TIPO);
+                Console.Write("\nLotação do Estabelecimento: ");
+                ConsoleHelpers.ChangeValue(estabelecimento.LOTACAO);
+                Console.Write("\nQuantidade de mesas do Estabelecimento: ");
+                ConsoleHelpers.ChangeValue(estabelecimento.QUANTIDADE_MESAS);
+                Console.Write("\nPreço de entrada do Estabelecimento: ");
+                ConsoleHelpers.ChangeValue(estabelecimento.PRECO_ENTRADA);
+                Console.Write("\nVagas de estacionamento do Estabelecimento: ");
+                ConsoleHelpers.ChangeValue(estabelecimento.VAGAS_ESTACIONAMENTO);
+
+                Console.WriteLine("\nAlterações feitas com sucesso!");
+                Console.Write("Tecle ENTER para voltar ao menu.");
+                Console.ReadLine();
+            }
+            catch
+            {
+                Console.WriteLine("Você digitou um valor inválido!");
+                Console.WriteLine("Tecle Enter para Editar novamente!");
+                Console.ReadLine();
+                Update();
+            }
+
+            return estabelecimento;
         }
         private EstabelecimentoEntity GetEstabelecimentoById(int id)
         {

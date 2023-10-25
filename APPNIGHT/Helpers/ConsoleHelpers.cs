@@ -14,7 +14,7 @@ namespace APPNIGHT.Helpers
             {
                 if (PerguntarSimNao($"Atual = {value} deseja alterar") == 'S')
                 {
-                    Console.WriteLine("Digite o novo valor");
+                    Console.Write("Digite o novo valor: ");
                     value = Console.ReadLine();
                 }
             }
@@ -30,7 +30,7 @@ namespace APPNIGHT.Helpers
             {
                 if (PerguntarSimNao($"Atual = {value} deseja alterar") == 'S')
                 {
-                    Console.WriteLine("Digite o novo valor");
+                    Console.Write("Digite o novo valor: ");
                     value = Convert.ToDecimal(Console.ReadLine());
                 }
             }
@@ -46,7 +46,7 @@ namespace APPNIGHT.Helpers
                 {
                     if (PerguntarSimNao($"Atual = {value} deseja alterar") == 'S')
                     {
-                        Console.WriteLine("Digite o novo valor");
+                        Console.Write("Digite o novo valor: ");
                         value = Convert.ToInt32(Console.ReadLine());
                     }
                 }
@@ -59,7 +59,7 @@ namespace APPNIGHT.Helpers
 
         public static char PerguntarSimNao(string mensagem = "Deseja continuar")
         {
-            Console.WriteLine($"{mensagem}? S/N");
+            Console.Write($"{mensagem}? S/N: ");
             return Convert.ToChar(Console.ReadLine().ToUpper());
         }
 
