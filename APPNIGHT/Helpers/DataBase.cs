@@ -11,13 +11,10 @@ namespace APPNIGHT.Helpers
     public class DataBase
     {
         protected string conectionString = "Server=localhost;Database=teste;User=root;Password=root;";
-
-
         protected MySqlConnection GetConnection()
         {
             return new MySqlConnection(conectionString);
         }
-
         protected int Execute(string sql, object obj)
         {
             using (MySqlConnection con = GetConnection())

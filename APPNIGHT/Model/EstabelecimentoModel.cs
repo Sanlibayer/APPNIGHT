@@ -25,8 +25,8 @@ namespace APPNIGHT.Model
                     "@HORARIO_FUNCIONAMENTO, @VAGAS_ESTACIONAMENTO, " +
                     "@QUANTIDADE_MESAS, @PRECO_ENTRADA, @TIPO)";
                 int linhas = connection.Execute(sql, estabelecimento);
-                Console.WriteLine($"ESTABELECIMENTO INSERIDO COM SUCESSO!");
-                Console.WriteLine("TECLE ENTER PARA CONTINUAR");
+                Console.WriteLine($"\nEstabelecimento cadastrado com sucesso!");
+                Console.Write("Tecle Enter para voltar ao menu.");
                 Console.ReadLine();
             }
         }
@@ -67,42 +67,46 @@ namespace APPNIGHT.Model
             }
             return estabelecimento;
         }
-
         public void Delete()
         {
             var parameters = new { Id = GetIndex() };
             string sql = "DELETE FROM ESTABELECIMENTO_2 WHERE ID = @ID";
             this.Execute(sql, parameters);
-            Console.WriteLine("Produto excluido com sucesso");
-            Console.WriteLine("TECLE ENTER PARA RETORNAR");
+            Console.WriteLine("\nProduto excluido com sucesso!");
+            Console.Write("Tecle ENTER para retornar ao menu.");
             Console.ReadLine();
         }
         private int GetIndex()
         {
             Read();
             Console.WriteLine();
-            Console.WriteLine("Acima estão listados os estabelecimentos");
             Console.Write("Digite o ID do estabelecimento que você deseja excluir: ");
             return Convert.ToInt32(Console.ReadLine());
         }
-
-
         public void Read(bool showPrompot = false)
         {
             Console.Clear();
             IEnumerable<EstabelecimentoEntity> estabelecimentos = GetEstabelecimento();
-            foreach (EstabelecimentoEntity estabelecimento in estabelecimentos)
+
+            if (estabelecimentos.Any())
+            {           
+                foreach (EstabelecimentoEntity estabelecimento in estabelecimentos)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("----------------------------------------");
+                    Console.WriteLine();
+                    Console.WriteLine($"{estabelecimento.ID} - {estabelecimento.NOME} / {estabelecimento.TIPO}");
+                    Console.WriteLine($"Endereço: {estabelecimento.ENDERECO}");
+                    Console.WriteLine($"Lotação máxima: {estabelecimento.LOTACAO} pessoas");
+                    Console.WriteLine($"Horário de funcionamento: {estabelecimento.HORARIO_FUNCIONAMENTO}");
+                    Console.WriteLine($"Quantidade de mesas do local: {estabelecimento.QUANTIDADE_MESAS}");
+                    Console.WriteLine($"Valor da entrada: {estabelecimento.PRECO_ENTRADA}");
+                    Console.WriteLine($"Vagas de estacionamento: {estabelecimento.VAGAS_ESTACIONAMENTO}");
+                }
+            }
+            else
             {
-                Console.WriteLine();
-                Console.WriteLine("----------------------------------------");
-                Console.WriteLine();
-                Console.WriteLine($"{estabelecimento.ID} - {estabelecimento.NOME} / {estabelecimento.TIPO}");
-                Console.WriteLine($"Endereço: {estabelecimento.ENDERECO}");
-                Console.WriteLine($"Lotação máxima: {estabelecimento.LOTACAO} pessoas");
-                Console.WriteLine($"Horário de funcionamento: {estabelecimento.HORARIO_FUNCIONAMENTO}");
-                Console.WriteLine($"Quantidade de mesas do local: {estabelecimento.QUANTIDADE_MESAS}");
-                Console.WriteLine($"Valor da entrada: {estabelecimento.PRECO_ENTRADA}");
-                Console.WriteLine($"Vagas de estacionamento: {estabelecimento.VAGAS_ESTACIONAMENTO}");
+                Console.WriteLine("Não há estabelecimentos cadastrados!");
             }
             if (showPrompot)
             { 
@@ -117,6 +121,18 @@ namespace APPNIGHT.Model
         }
         public void Update()
         {
+
+            Console.Clear();
+            IEnumerable<EstabelecimentoEntity> estabelecimentos = GetEstabelecimento();
+
+            if (!estabelecimentos.Any())
+            {
+                Console.WriteLine("Não há estabelecimentos para atualizar.");
+                Console.Write("\nTecle ENTER para voltar ao menu!");
+                Console.ReadLine();
+                return;
+            }
+
             try 
             { 
             Console.Clear();

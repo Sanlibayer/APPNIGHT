@@ -37,7 +37,7 @@ namespace APPNIGHT.Helpers
                     case 5:
                         break;
                     default:
-                        Console.WriteLine("OPÇÃO INVÁLIDA! TECLE ENTER PARA CONTINUAR.");
+                        Console.WriteLine("\nOpção Inválida. Tecle ENTER para voltar ao menu!");
                         Console.ReadLine();
                         MostrarMenuCrud(crud);
                         break;

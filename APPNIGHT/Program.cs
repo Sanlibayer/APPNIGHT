@@ -1,31 +1,32 @@
-﻿using APPNIGHT.Entity;
-using APPNIGHT.Helpers;
+﻿using APPNIGHT.Helpers;
 using MySql.Data.MySqlClient;
+using System.Runtime.CompilerServices;
 
 namespace APPNIGHT
 {
     internal class Program
-    {
-
-            static void Main(string[] args)
-            {
+    {  
+        static void Main(string[] args)
+        {
+            while (true)
+            {           
                 try
                 {
-                    Menu menu = new Menu();
-                    menu.MostrarMenuPrincipal();
-                    
+                Menu menu = new Menu();
+                menu.MostrarMenuPrincipal();
+                break;
                 }
                 catch (MySqlException ex)
                 {
                     Console.WriteLine("Erro MySql");
                     Console.WriteLine(ex.Message);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    Console.WriteLine("Erro");
-                    Console.WriteLine(ex.Message);
+                    Console.Write("\nDigite apenas números! Tecle ENTER para tentar novamente.");                  
+                    Console.ReadLine();
                 }
             }
-        
+        }       
     }
 }

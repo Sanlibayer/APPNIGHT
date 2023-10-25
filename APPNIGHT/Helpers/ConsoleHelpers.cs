@@ -56,31 +56,25 @@ namespace APPNIGHT.Helpers
             }
             return value;
         }
-
         public static char PerguntarSimNao(string mensagem = "Deseja continuar")
         {
             Console.Write($"{mensagem}? S/N: ");
             return Convert.ToChar(Console.ReadLine().ToUpper());
         }
-
         public static double AskDouble(string pergunta)
         {
             Console.WriteLine(pergunta);
             return Convert.ToDouble(Console.ReadLine());
         }
-
         public static int AskInt(string pergunta)
         {
             Console.WriteLine(pergunta);
             return Convert.ToInt32(Console.ReadLine());
         }
-
         public static string AskString(string pergunta)
         {
             Console.WriteLine(pergunta);
             return Console.ReadLine();
         }
-
-
     }
 }
