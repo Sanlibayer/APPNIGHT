@@ -10,7 +10,7 @@ namespace APPNIGHT.Model
     {
         public void Create();
         public void Update();
-        public void Read();
+        public void Read(bool showPrompot = true);
         public void Delete();
     }
 }

@@ -19,11 +19,11 @@ namespace APPNIGHT.Helpers
                   switch (MenuCrud())
                 {
                     case 1:
-                        crud.Read();
-                    MostrarMenuPrincipal();
-                        break;
-                    case 2:
                         crud.Create();
+                    MostrarMenuPrincipal();
+                    break;
+                    case 2:
+                        crud.Read();
                     MostrarMenuPrincipal();
                     break;
                     case 3:
@@ -43,19 +43,22 @@ namespace APPNIGHT.Helpers
                         break;
                 }
             Console.Clear();
-            Console.WriteLine("ATÉ MAIS!");
+            Console.WriteLine("Nós dos APP Night agradecemos, conte sempre com a gente!");
+            Console.WriteLine("\nA NOITE NA PALMA DE SUA MÃO!");
         }
         private int MenuCrud()
         {
             Console.Clear();
-            Console.WriteLine("ESTABELECIMENTOS");
-            Console.WriteLine("O QUE DESEJA FAZER?");
-            Console.WriteLine("1 - Visualizar");
-            Console.WriteLine("2 - Cadastrar");
+            Console.Title = "APP NIGHT";
+            Console.WriteLine("\n------ APP NIGHT ------\n");
+            Console.WriteLine("O que deseja fazer?\n");
+            Console.WriteLine("1 - Cadastrar");
+            Console.WriteLine("2 - Visualizar");
             Console.WriteLine("3 - Editar");
             Console.WriteLine("4 - Excluir");
             Console.WriteLine("5 - Sair");
-            return Convert.ToInt32(Console.ReadLine());
+            Console.Write("\nDigite a opção desejada: ");
+            return Convert.ToInt32(Console.ReadLine());       
         }
     }
 }

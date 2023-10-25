@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace APPNIGHT.Model
@@ -20,7 +21,7 @@ namespace APPNIGHT.Model
             estabelecimento = Popular(estabelecimento);
             using (MySqlConnection connection = new MySqlConnection(conectionString))
             {
-                string sql = "INSERT INTO ESTABELECIMENTO VALUE (NULL, @NOME, @ENDERECO, @LOTACAO, " +
+                string sql = "INSERT INTO ESTABELECIMENTO_2 VALUE (NULL, @NOME, @ENDERECO, @LOTACAO, " +
                     "@HORARIO_FUNCIONAMENTO, @VAGAS_ESTACIONAMENTO, " +
                     "@QUANTIDADE_MESAS, @PRECO_ENTRADA, @TIPO)";
                 int linhas = connection.Execute(sql, estabelecimento);
@@ -31,32 +32,46 @@ namespace APPNIGHT.Model
         }
         private EstabelecimentoEntity Popular(EstabelecimentoEntity estabelecimento)
         {
-            Console.WriteLine("Digite o nome do seu estabelecimento:");
-            estabelecimento.NOME = ConsoleHelpers.ChangeValue(estabelecimento.NOME);
-            Console.WriteLine("Digite o endereço do seu estabelecimento:");
-            estabelecimento.ENDERECO = ConsoleHelpers.ChangeValue(estabelecimento.ENDERECO);
-            Console.WriteLine("Digite a horário de funcionamento do seu estabelecimento:");
-            Console.WriteLine("Exemplo: 'Segunda à Sexta das 8:00 às 19:30'");
-            estabelecimento.HORARIO_FUNCIONAMENTO = ConsoleHelpers.ChangeValue(estabelecimento.HORARIO_FUNCIONAMENTO);
-            Console.WriteLine("Digite o tipo do seu estabelecimento:");
-            Console.WriteLine("Exemplo: Balada, Restaurante, Pub, Pizzaria, etc");
-            estabelecimento.TIPO = ConsoleHelpers.ChangeValue(estabelecimento.TIPO);
-            Console.WriteLine("Digite o número máximo de pessoas para o seu estabelecimento:");
-            estabelecimento.LOTACAO = ConsoleHelpers.ChangeValue(estabelecimento.LOTACAO); ;
-            Console.WriteLine("Digite o número de mesas no estabelecimento:");
-            estabelecimento.QUANTIDADE_MESAS = ConsoleHelpers.ChangeValue(estabelecimento.QUANTIDADE_MESAS);
-            Console.WriteLine("Digite o preço da entrada:");
-            estabelecimento.PRECO_ENTRADA = ConsoleHelpers.ChangeValue(estabelecimento.PRECO_ENTRADA);
-            Console.WriteLine("Digite o número de vagas de estacionamento do seu estabelecimento:");
-            estabelecimento.VAGAS_ESTACIONAMENTO = ConsoleHelpers.ChangeValue(estabelecimento.VAGAS_ESTACIONAMENTO);
+            while(true) 
+            { 
+                try
+                {
+                    Console.Clear();
+                    Console.WriteLine("\nCADASTRO DE ESTABELECIMENTO\n");
+                    Console.Write("Digite o nome do seu estabelecimento: ");
+                    estabelecimento.NOME = ConsoleHelpers.ChangeValue(estabelecimento.NOME);
+                    Console.Write("Digite o endereço do seu estabelecimento: ");
+                    estabelecimento.ENDERECO = ConsoleHelpers.ChangeValue(estabelecimento.ENDERECO);
+                    Console.Write("Digite a horário de funcionamento do seu estabelecimento (Exemplo: 'Segunda à Sexta das 8:00 às 19:30'): ");
+                    estabelecimento.HORARIO_FUNCIONAMENTO = ConsoleHelpers.ChangeValue(estabelecimento.HORARIO_FUNCIONAMENTO);
+                    Console.Write("Digite o tipo do seu estabelecimento (Exemplo: Balada, Restaurante, Pub, Pizzaria, etc): ");
+                    estabelecimento.TIPO = ConsoleHelpers.ChangeValue(estabelecimento.TIPO);
+                    Console.Write("Lotação máxima em seu estabelecimento: ");
+                    estabelecimento.LOTACAO = ConsoleHelpers.ChangeValue(estabelecimento.LOTACAO);
+                    Console.Write("Digite o número de mesas que possuem no seu estabelecimento: ");
+                    estabelecimento.QUANTIDADE_MESAS = ConsoleHelpers.ChangeValue(estabelecimento.QUANTIDADE_MESAS);
+                    Console.Write("Digite o preço da entrada (se aplicável): ");
+                    estabelecimento.PRECO_ENTRADA = ConsoleHelpers.ChangeValue(estabelecimento.PRECO_ENTRADA);
+                    Console.Write("Digite o número de vagas de estacionamento do seu estabelecimento (se aplicável): ");
+                    estabelecimento.VAGAS_ESTACIONAMENTO = ConsoleHelpers.ChangeValue(estabelecimento.VAGAS_ESTACIONAMENTO);
 
+                    break;
+                }
+                catch
+                {
+                    Console.WriteLine("\nVocê digitou algum dado inválido!");
+                    Console.Write("Tecle ENTER para cadastrar seu estabelecimento novamente!");
+                    Console.ReadLine();
+                    estabelecimento = new EstabelecimentoEntity();
+                }
+            }
             return estabelecimento;
         }
 
         public void Delete()
         {
             var parameters = new { Id = GetIndex() };
-            string sql = "DELETE FROM ESTABELECIMENTO WHERE ID = @ID";
+            string sql = "DELETE FROM ESTABELECIMENTO_2 WHERE ID = @ID";
             this.Execute(sql, parameters);
             Console.WriteLine("Produto excluido com sucesso");
             Console.WriteLine("TECLE ENTER PARA RETORNAR");
@@ -69,41 +84,55 @@ namespace APPNIGHT.Model
             return Convert.ToInt32(Console.ReadLine());
         }
 
-        public void Read()
+
+        public void Read(bool showPrompot = false)
         {
             IEnumerable<EstabelecimentoEntity> estabelecimentos = GetEstabelecimento();
             foreach (EstabelecimentoEntity estabelecimento in estabelecimentos)
             {
+                Console.WriteLine();
                 Console.WriteLine($"{estabelecimento.ID} - {estabelecimento.NOME} / {estabelecimento.TIPO}");
                 Console.WriteLine($"Endereço: {estabelecimento.ENDERECO}");
-                Console.WriteLine($"Máximo de pessoas: {estabelecimento.LOTACAO}");
+                Console.WriteLine($"Lotação máxima: {estabelecimento.LOTACAO} pessoas");
                 Console.WriteLine($"Horário de funcionamento: {estabelecimento.HORARIO_FUNCIONAMENTO}");
                 Console.WriteLine($"Quantidade de mesas do local: {estabelecimento.QUANTIDADE_MESAS}");
                 Console.WriteLine($"Valor da entrada: {estabelecimento.PRECO_ENTRADA}");
                 Console.WriteLine($"Vagas de estacionamento: {estabelecimento.VAGAS_ESTACIONAMENTO}");
-
             }
-            Console.WriteLine("TECLE ENTER PARA CONTINUAR");
+            if (showPrompot)
+            { 
+            Console.Write("\nTecle ENTER para voltar ao menu!");
             Console.ReadLine();
+            }
         }
         private IEnumerable<EstabelecimentoEntity> GetEstabelecimento()
         {
-            string sql = "SELECT * FROM ESTABELECIMENTO";
+            string sql = "SELECT * FROM ESTABELECIMENTO_2";
             return this.GetConnection().Query<EstabelecimentoEntity>(sql);
         }
         public void Update()
         {
-            Console.WriteLine("ESTABELECIMENTOS CADASTRADOS:");
+            try 
+            { 
+            Console.Clear();
+            Console.WriteLine("\nESTABELECIMENTOS CADASTRADOS:");
             Read();
-            Console.WriteLine("INFORME O ID DO ESTABELECIMENTO DESEJA ALTERAR?");
+            Console.Write("\nInforme o ID do estabelecimento que deseja alterar: ");
             int id = Convert.ToInt32(Console.ReadLine());
             EstabelecimentoEntity estabelecimento = Popular(GetEstabelecimentoById(id));
-            string sql = "UPDATE ESTABELECIMENTO SET NOME = @NOME, ENDERECO = @ENDERECO, LOTACAO = @LOTACAO, HORARIO_FUNCIONAMENTO = @HORARIO_FUNCIONAMENTO, VAGAS_ESTACIONAMENTO = @VAGAS_ESTACIONAMENTO, QUANTIDADE_MESAS = @QUANTIDADE_MESAS, PRECO_ENTRADA = @PRECO_ENTRADA, TIPO = @TIPO WHERE ID = @ID";
+            string sql = "UPDATE ESTABELECIMENTO_2 SET NOME = @NOME, ENDERECO = @ENDERECO, LOTACAO = @LOTACAO, HORARIO_FUNCIONAMENTO = @HORARIO_FUNCIONAMENTO, VAGAS_ESTACIONAMENTO = @VAGAS_ESTACIONAMENTO, QUANTIDADE_MESAS = @QUANTIDADE_MESAS, PRECO_ENTRADA = @PRECO_ENTRADA, TIPO = @TIPO WHERE ID = @ID";
             this.Execute(sql, estabelecimento);
+            }
+            catch
+            {
+                Console.Write("\nTecle ENTER e digite um ID válido!");
+                Console.ReadLine();
+                Update();
+            }
         }
         private EstabelecimentoEntity GetEstabelecimentoById(int id)
         {
-            string sql = "SELECT * FROM ESTABELECIMENTO WHERE ID = @ID";
+            string sql = "SELECT * FROM ESTABELECIMENTO_2 WHERE ID = @ID";
             var parametros = new { ID = id };
             return this.GetConnection().QueryFirst<EstabelecimentoEntity>(sql, parametros);
         }
