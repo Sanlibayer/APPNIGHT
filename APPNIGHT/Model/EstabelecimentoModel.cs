@@ -69,12 +69,24 @@ namespace APPNIGHT.Model
         }
         public void Delete()
         {
-            var parameters = new { Id = GetIndex() };
-            string sql = "DELETE FROM ESTABELECIMENTO_2 WHERE ID = @ID";
-            this.Execute(sql, parameters);
-            Console.WriteLine("\nProduto excluido com sucesso!");
-            Console.Write("Tecle ENTER para retornar ao menu.");
-            Console.ReadLine();
+            
+            try
+            {
+                var parameters = new { Id = GetIndex() };
+                string sql = "DELETE FROM ESTABELECIMENTO_2 WHERE ID = @ID";
+                this.Execute(sql, parameters);
+
+                Console.WriteLine("\nProduto excluido com sucesso!");
+                Console.Write("Tecle ENTER para retornar ao menu.");
+                Console.ReadLine();
+            }
+            catch
+            {
+                Console.Write("Código digitado inválido, tecle ENTER para digitar novamente!");
+                Console.ReadLine();
+                Delete();
+            }
+            
         }
         private int GetIndex()
         {
@@ -92,8 +104,6 @@ namespace APPNIGHT.Model
             {           
                 foreach (EstabelecimentoEntity estabelecimento in estabelecimentos)
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("----------------------------------------");
                     Console.WriteLine();
                     Console.WriteLine($"{estabelecimento.ID} - {estabelecimento.NOME} / {estabelecimento.TIPO}");
                     Console.WriteLine($"Endereço: {estabelecimento.ENDERECO}");
@@ -186,7 +196,6 @@ namespace APPNIGHT.Model
                 Console.ReadLine();
                 Update();
             }
-
             return estabelecimento;
         }
         private EstabelecimentoEntity GetEstabelecimentoById(int id)

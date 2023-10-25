@@ -44,7 +44,7 @@ namespace APPNIGHT.Helpers
                 }
             Console.Clear();
             Console.WriteLine("Nós dos APP Night agradecemos, conte sempre com a gente!");
-            Console.WriteLine("\nA NOITE NA PALMA DE SUA MÃO!");
+            Console.WriteLine("\nA NOITE NA PALMA DA SUA MÃO!");
         }
         private int MenuCrud()
         {
